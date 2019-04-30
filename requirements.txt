@@ -1,5 +1,5 @@
 Flask==1.0.2
-Flask-Admin==1.5.1
+Flask-Admin
 Flask-Bcrypt==0.7.1
 Flask-Cors
 Flask-Loginmanager==1.1.6
@@ -14,9 +14,9 @@ Flask-Social==1.6.2
 Flask-SQLAlchemy==2.3.2
 Flask-WTF==0.14.2
 itsdangerous==0.24
-jinja2==2.10
+jinja2
 mysql-connector==2.1.6
-urllib3==1.24.1
+urllib3
 requests==2.21.0
 bcrypt==3.1.4
 pyOpenSSL==18.0
