@@ -1,0 +1,10 @@
+#migrations/
+*.idea/
+*venv/
+*__pycache__
+*.crt
+*.key
+**app.db
+**config_prod.py
+**createdb.py
+*.log

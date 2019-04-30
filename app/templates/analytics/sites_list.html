@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% from "security/_macros.html" import render_field, render_field_with_errors, render_checkbox_field %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+    <div class="row">
+        <div class="sixteen wide column">
+            <div class="ui segments">
+                <div class="ui segment">
+                    <h3 class="left floated left aligned six wide column">
+                    Sites list
+                    </h3>
+                </div>
+                <div class="ui segment">
+                    <!--<table class="ui compact celled definition table tablet stackable">-->
+                    <table class="ui single line table tablet stackable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Site Name</th>
+                                <th>Site Url</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for site in site_list %}
+                            <tr>
+                                <td>{{ site.idsite }}</td>
+                                <td><a class="" href="{{ url_for('index', idSite=site.idsite) }}">{{ site.name }}</a></td>
+                                <td>{{ site.main_url }}</td>
+                                <td class="ui right aligned three wide">
+
+                                    <div class="ui right floated main menu popups">
+                                        <a class="dashboard popup icon item mini" data-content="Dashboard" href="{{ url_for('index', idSite=site.idsite) }}">
+                                          <i class="chart bar icon"></i>
+                                        </a>
+
+                                        <a class="file popup icon item" data-content="Details" href="{{ url_for('analytics_sites', idSite=site.idsite) }}">
+                                          <i class="file alternate outline icon"></i>
+                                        </a>
+
+                                        <a class="edit popup icon item" data-content="Edit" href="{{ url_for('analytics_sites_edit', idsite=site.idsite) }}">
+                                          <i class="edit alternate outline icon blue"></i>
+                                        </a>
+
+                                        <a class="trash popup icon item" data-content="Delete" href="{{ url_for('analytics_sites_delete', idsite=site.idsite) }}">
+                                          <i class="trash alternate outline icon red"></i>
+                                        </a>
+                                    </div>
+
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="ui segment">
+                    <a class="ui positive button" href="{{ url_for('analytics_sites_add') }}">Add new site</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>jQuery('.ui.dropdown').dropdown();</script>
+    <script type="text/javascript">
+    $(document)
+      .ready(function() {
+        $('.popups .popup.icon')
+          .popup()
+        ;
+      })
+    ;
+    </script>
+    {% endif %}
+
+{% endblock %}

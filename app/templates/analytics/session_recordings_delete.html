@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% from "analytics/_macros.html" import render_field, render_field_with_errors, render_checkbox_field, render_hidden_field %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+            <div class="sixteen wide column">
+
+				<form class="ui form" action="{{ url_for('analytics_session_recordings_delete', idSite=idsite, idsitehsr=idsitehsr) }}" method="post" name="recording_delete_form">
+					<h4 class="ui dividing header">Delete Session Recording "{{ recording.name }}"</h4>
+					{{ recording_delete_form.hidden_tag() }}
+					<input class="field" type="hidden" id="recording_name_orig" name="recording_name_orig" value="{{ recording.name }}">
+                    <div class="field">
+                        <label>In order to confirm the deletion of the session recording, please type it's name bellow:</label>
+                        <input type="text" id="recording_name_check" name="name">
+                    </div>
+                    <div class="field">
+    					<input class="ui submit button disabled" type="submit" id="submit" value="Delete">
+                    </div>
+
+                    <script>
+                    jQuery('#recording_name_check').keyup(function() {
+                        if (jQuery("#recording_name_orig").val() === jQuery("#recording_name_check").val()) {
+                            jQuery('#submit').removeClass('disabled')
+                        } else {
+                            jQuery('#submit').addClass('disabled')
+                        }
+                    });
+                    </script>
+
+				</form>
+
+            </div>
+
+    {% endif %}
+
+{% endblock %}

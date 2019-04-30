@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+{% from "security/_macros.html" import render_field, render_field_with_errors, render_checkbox_field %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+    <div class="row">
+        <div class="sixteen wide column">
+            <div class="ui segments">
+                <div class="ui segment">
+                    <h3 class="left floated left aligned six wide column">
+                        Site settings
+                    </h3>
+                </div>
+                <div class="ui segment">
+                    <h5>{{ site.name }}</h5>
+                    <table class="ui celled padded table">
+                        <tbody>
+                            <tr>
+                                <th class="collapsing">Main URL</th>
+                                <td>{{ site.main_url }}</td>
+                            </tr>
+                            <tr>
+                                <th class="collapsing">Ecommerce</th>
+                                <td>{% if site.ecommerce|int %}<i class="small green checkmark icon"></i>{% else %}<i class="small grey times icon"></i>{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <th class="collapsing">Site search</th>
+                                <td>{% if site.sitesearch|int %}<i class="small green checkmark icon"></i>{% else %}<i class="small grey times icon"></i>{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <th class="collapsing">Search keyword parameters</th>
+                                <td>{{site.sitesearch_keyword_parameters}}</td>
+                            </tr>
+                            <tr>
+                                <th class="collapsing">Search category parameters</th>
+                                <td>{{site.sitesearch_category_parameters}}</td>
+                            </tr>
+                            <tr>
+                                <th class="collapsing">Timezone</th>
+                                <td>{{site.timezone}}</td>
+                            </tr>
+                            <tr>
+                                <th class="collapsing">Currency</th>
+                                <td>{{site.currency}}</td>
+                            </tr>
+                            <tr>
+                                <th class="collapsing">Exclude unknown urls</th>
+                                <td>{% if site.exclude_unknown_urls|int %}<i class="small green checkmark icon"></i>{% else %}<i class="small grey times icon"></i>{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <th class="collapsing">Excelude IPS</th>
+                                <td>{{site.excluded_ips}}</td>
+                            </tr>
+                            <tr>
+                                <th class="collapsing">Exclude parameters</th>
+                                <td>{{site.excluded_parameters}}</td>
+                            </tr>
+                            <tr>
+                                <th class="collapsing">Exclude user agents</th>
+                                <td>{{site.excluded_user_agents}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="ui divider"></div>
+<div class="ui inverted segment">
+<h5 class="ui dividing inverted header">Add this code before the end of &lt;/body&gt; section of your pages</h5>
+<!-- Tracking Code example-->
+<xmp>
+{% include "analytics/tracking_code.html" %}
+</xmp>
+<!-- Tracking Code example-->
+</div>
+                    <div class="ui divider"></div>
+<div class="ui inverted segment">
+<h5 class="ui dividing inverted header">Add this code before the ending </body> tags of your pages, if you want to track users with javascript disabled</h5>
+<!-- Tracking Code example-->
+<xmp>
+{% include "analytics/tracking_code_noscript.html" %}
+</xmp>
+<!-- Tracking Code example-->
+</div>
+<!-- Tracking Code example-->
+                    <div class="ui divider"></div>
+                    <a class="ui primary basic button small" href="{{ url_for('index', idSite=site.idsite) }}">Dashboard</a>
+                    <a class="ui primary button small" href="{{ url_for('analytics_sites_edit', idsite=site.idsite) }}">Edit</a>
+                    <a class="ui button small" href="{{ url_for('analytics_sites_delete', idsite=site.idsite) }}">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+{% endblock %}

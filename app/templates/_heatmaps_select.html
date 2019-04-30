@@ -1,0 +1,5 @@
+{% from "macros.html" import render_heatmaps_select %}
+
+{% if current_user.is_authenticated %}
+    {{ render_heatmaps_select(session['matomo_heatmaps'], g.idSite, g.idSiteHsr) }}
+{% endif %}

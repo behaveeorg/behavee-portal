@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% from "analytics/_macros.html" import render_field, render_field_with_errors, render_checkbox_field, render_hidden_field %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+    <div class="row">
+        <div class="sixteen wide column">
+            <div class="ui segments">
+                <div class="ui segment">
+                    <h3 class="left floated left aligned six wide column">Delete Site "{{ site.name }}"</h3>
+                </div>
+                <div class="ui segment">
+                    <form class="ui form" action="{{ url_for('analytics_sites_delete', idsite=idsite) }}" method="post" name="site_delete_form">
+
+                        {{ site_delete_form.hidden_tag() }}
+                        <input class="field" type="hidden" id="site_name_orig" name="site_name_orig" value="{{ site.name }}">
+                        <div class="field">
+                            <label>In order to confirm the deletion of the site, please type it's name bellow:</label>
+                            <input type="text" id="site_name_check" name="name">
+                        </div>
+                        <div class="field">
+                            <input class="ui submit button disabled red" type="submit" id="submit" value="Delete">
+                        </div>
+
+                        <script>
+                        jQuery('#site_name_check').keyup(function() {
+                            if (jQuery("#site_name_orig").val() === jQuery("#site_name_check").val()) {
+                                jQuery('#submit').removeClass('disabled')
+                            } else {
+                                jQuery('#submit').addClass('disabled')
+                            }
+                        });
+                        </script>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,73 @@
+<script>
+function iframeResize(){
+    var iFrames = document.getElementsByClassName('auto-height');
+    for (var i = 0, j = iFrames.length; i < j; i++)
+    {
+        // Set inline style to equal the body height of the iframed content.
+        try {
+            var h = iFrames[i].contentDocument.body.offsetHeight;
+            if (h) {
+                if (h > 0) {
+                    iFrames[i].style.height = h + 'px';
+                }
+            }
+        }
+        catch(err) {
+            console.log(err.message);
+        }
+    }
+}
+
+// add/remove no scroll class to body
+function toggleNoScroll(e, off) {
+	//	test if already exist:
+	var a = Array.prototype.indexOf.call(e.contentDocument.body.classList, 'no-scroll') + 1;
+	//	remove if does exist, so as not to double up
+	e.contentDocument.body.className = e.contentDocument.body.className.replace(' no-scroll', ' ');
+	//	add only if off IS False OR off is empty & it did not previously exist (thus "toggle")
+	if (off === false || (off !== true && !a)) e.contentDocument.body.className += " no-scroll";
+	return e.contentDocument.body.classList;
+}
+
+// mozfullscreenerror event handler
+function errorHandler() {
+   alert('mozfullscreenerror');
+}
+
+//contentDocument.documentElement.addEventListener('mozfullscreenerror', errorHandler, false);
+
+// toggle iframe full screen
+window.toggleFullScreen = function(e) {
+    if (!e.fullscreenElement && !e.mozFullScreenElement && !e.webkitFullscreenElement) {
+		toggleNoScroll(e, true);
+		if (e.requestFullscreen) e.requestFullscreen();
+		else if (e.mozRequestFullScreen) e.mozRequestFullScreen();
+		else if (e.webkitRequestFullscreen) e.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+	}
+	else {
+		toggleNoScroll(e, false);
+		if (e.cancelFullScreen) e.cancelFullScreen();
+		else if (e.mozCancelFullScreen) e.mozCancelFullScreen();
+		else if (e.webkitCancelFullScreen) e.webkitCancelFullScreen();
+	}
+}
+
+$(window).on('load', function(){
+    $('iframes').iframeAutoHeight({debug: false, minHeight: 100, animate: true});
+
+    if ($('.defer-iframe').length) {
+        $('.defer-iframe').each( function() {
+            var $iframe = $('<iframe frameborder="0" width="100%" marginheight="0" marginwidth="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
+            $iframe.attr($(this).data());
+            $(this).append($iframe);
+         });
+     }
+
+    try {
+        setInterval(iframeResize,1000);
+        }
+    catch(err) {
+        console.log(err.message);
+        }
+});
+</script>

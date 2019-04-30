@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+{% import "macros.html" as m %}
+<html lang="en">
+
+<head>
+    <title>{{ title }}</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name=viewport content="width=device-width, initial-scale=1" />
+    <link href="{{ url_for('static', filename='semantic/dist/semantic.min.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='plugins/ionicons/css/ionicons.min.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='plugins/datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='plugins/weather-icons/css/weather-icons-wind.min.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='plugins/weather-icons/css/weather-icons.min.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='plugins/chartist/chartist.min.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/chat-page.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet" />
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/calendar.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='semantic/dist/semantic.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.browser.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-iframe-auto-height.js') }}"></script>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}" />
+
+	<script type="text/javascript">
+	if (window.location.hash && window.location.hash == '#_=_') {
+		if (window.history && history.pushState) {
+			window.history.pushState("", document.title, window.location.pathname);
+		} else {
+			// Prevent scrolling by storing the page's current scroll offset
+			var scroll = {
+				top: document.body.scrollTop,
+				left: document.body.scrollLeft
+			};
+			window.location.hash = '';
+			// Restore the scroll offset, should be flicker free
+			document.body.scrollTop = scroll.top;
+			document.body.scrollLeft = scroll.left;
+		}
+	}
+	</script>
+
+</head>
+
+<body>
+    <div id="contextWrap">
+        <!--sidebar-->
+        <div class="ui sidebar vertical left menu overlay  borderless visible sidemenu inverted blueli" style="-webkit-transition-duration: 0.1s; transition-duration: 0.1s;" data-color="blueli">
+            <a class="item logo" href="{{ behavee_url_for('index') }}">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="behavee" /><img src="{{ url_for('static', filename='img/thumblogo.png') }}" alt="behavee" class="displaynone" />
+            </a>
+			{% include "_menu.html" %}
+        </div>
+        <!--sidebar-->
+
+        <div class="pusher">
+            <!--navbar-->
+			{% block head %}
+            <div class="navslide navwrap">
+                <div class="ui menu icon borderless inverted blue" data-color="inverted blue">
+                    <a class="item labeled openbtn">
+                        <i class="ion-navicon-round big icon"></i>
+                    </a>
+                    <a class="item labeled expandit" onclick="toggleFullScreen(document.body)">
+                        <i class="ion-arrow-expand big icon"></i>
+                    </a>
+                    <div class="right menu colhidden">
+
+					{% if current_user.is_authenticated %}
+                        <div class="ui dropdown item">
+                            {{ current_user.email }}&nbsp;&nbsp;<img class="ui mini circular image" src="{{ url_for('static', filename='img/avatar/people/user.png') }}" alt="{{ current_user.email }}" />
+                            <div class="menu">
+                                <a class="item" href="{{ url_for('account_profile') }}">Account</a>
+								<a class="item" href="{{ url_for('partner_profile_view') }}">Partnre</a>
+                                <!--{{ m.nav_link('api', 'API', '_blank') }}-->
+                                <div class="ui divider"></div>
+                                <a class="item" href="{{ url_for('users_logout') }}">Sign Out</a>
+                            </div>
+                        </div>
+					{% endif %}
+
+                    </div>
+                </div>
+            </div>
+			{% endblock %}
+            <!--navbar-->
+
+            <!--content-->
+            <div class="mainWrap navslide">
+
+                {% block contentbefore %}{% endblock %}
+
+                <div class="ui equal width left aligned padded grid stackable">
+				<!-- message flashing -->
+				{% with messages = get_flashed_messages(with_categories=true) %}
+					{% if messages %}
+						{% for category, message in messages %}
+                        <div class="row">
+                            <div class="sixteen wide column">
+								<div class="ui {{ category }} message">
+									<div class="content">
+										<p>{{ message }}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						{% endfor %}
+					{% endif %}
+				{% endwith %}
+				<!-- message flashing -->
+
+	            <!--maincontent-->
+                {% block content %}{% endblock %}
+	            <!--maincontent-->
+
+                </div>
+
+                {% block contentafter %}{% endblock %}
+
+            </div>
+            <!--content-->
+        </div>
+    </div>
+
+    <!--jquery-->
+    <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.easing.1.3.js') }}"></script>
+    <!--jquery-->
+    <!--semantic-->
+    <script src="{{ url_for('static', filename='semantic/dist/semantic.min.js') }}"></script>
+    <!--semantic-->
+    <!--counter number-->
+    <script src="{{ url_for('static', filename='plugins/counterup/jquery.counterup.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/counterup/waypoints.min.js') }}"></script>
+    <!--counter number-->
+    <!--flot chart-->
+    <script src="{{ url_for('static', filename='plugins/flot/jquery.flot.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/flot/jquery.flot.resize.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/flot/jquery.flot.tooltip.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/flot/curvedLines.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/cookie/js.cookie.js') }}"></script>
+    <!--flot chart-->
+    <!--chartjs chart-->
+    <script src="{{ url_for('static', filename='plugins/chartjs/chart.min.js') }}"></script>
+    <!--chartjs chart-->
+
+    <script src="{{ url_for('static', filename='plugins/nicescrool/jquery.nicescroll.min.js') }}"></script>
+
+    <script data-pace-options='{ "ajax": false }' src="{{ url_for('static', filename='plugins/pacejs/pace.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='plugins/chartist/chartist.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dashboard2.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/list.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/moment-with-locales.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/URI.js') }}"></script>
+
+{% block footer %}
+{% endblock %}
+
+</body>
+
+</html>

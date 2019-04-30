@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+{% from "analytics/_macros.html" import render_matomo_widget %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+        <div class="row">
+            <div class="sixteen wide column">
+            {% include "_sites_picker.html" %}
+            {% include "_date_picker.html" %}
+            </div>
+        </div>
+        <!-- main content -->
+
+        {% if g.idSite is not none %}
+
+            {% if pageAction == 'all' %}
+            <div class="sixteen wide tablet two wide computer column">
+                <div class="ui vertical secondary pointing fluid tabular menu">
+                    <a class="item active" data-tab="pages">
+                        Pages
+                    </a>
+                    <a class="item" data-tab="entryPages">
+                        Entry Pages
+                    </a>
+                    <a class="item" data-tab="exitPages">
+                        Exit Pages
+                    </a>
+                    <a class="item" data-tab="outlinks">
+                        Outlinks
+                    </a>
+                    <a class="item" data-tab="downloads">
+                        Downloads
+                    </a>
+                    <a class="item" data-tab="actions">
+                        Actions
+                    </a>
+                    <a class="item" data-tab="events">
+                        Events
+                    </a>
+                    <a class="item" data-tab="siteSearch">
+                        Site Search
+                    </a>
+                </div>
+            </div>
+            <div class="sixteen wide tablet fourteen wide computer column">
+                <div class="ui tab active" data-tab="pages">
+                {{ render_matomo_widget('widget_01', app.config['MATOMO_URL'], 'Pages', 'Actions', 'getPageUrls', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', true) }}
+                {{ render_matomo_widget('widget_02', app.config['MATOMO_URL'], 'Page Titles', 'Actions', 'getPageTitles', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', true) }}
+                </div>
+                <div class="ui tab" data-tab="entryPages">
+                {{ render_matomo_widget('widget_03', app.config['MATOMO_URL'], 'Entry Pages', 'Actions', 'getEntryPageUrls', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_04', app.config['MATOMO_URL'], 'Entry Pages Titles', 'Actions', 'getEntryPageTitles', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+                <div class="ui tab" data-tab="exitPages">
+                {{ render_matomo_widget('widget_05', app.config['MATOMO_URL'], 'Exit Pages', 'Actions', 'getExitPageUrls', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_06', app.config['MATOMO_URL'], 'Exit Pages Titles', 'Actions', 'getExitPageTitles', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+                <div class="ui tab" data-tab="outlinks">
+                {{ render_matomo_widget('widget_07', app.config['MATOMO_URL'], 'Outlinks', 'Actions', 'getOutlinks', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+                <div class="ui tab" data-tab="downloads">
+                {{ render_matomo_widget('widget_08', app.config['MATOMO_URL'], 'Downloads', 'Actions', 'getDownloads', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+                <div class="ui tab" data-tab="actions">
+                {{ render_matomo_widget('widget_09', app.config['MATOMO_URL'], 'Actions: Content Name', 'Contents', 'getContentNames', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_10', app.config['MATOMO_URL'], 'Actions: Content Piece', 'Contents', 'getContentPieces', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+                <div class="ui tab" data-tab="events">
+                {{ render_matomo_widget('widget_11', app.config['MATOMO_URL'], 'Actions: Event Actions', 'Events', 'getAction', '&secondaryDimension=eventName&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_12', app.config['MATOMO_URL'], 'Actions: Event Categories', 'Events', 'getCategory', '&secondaryDimension=eventAction&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_13', app.config['MATOMO_URL'], 'Actions: Event Names', 'Events', 'getName', '&secondaryDimension=eventAction&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+                <div class="ui tab" data-tab="siteSearch">
+                {{ render_matomo_widget('widget_14', app.config['MATOMO_URL'], 'Page Titles Following a Site Search', 'Actions', 'getPageTitlesFollowingSiteSearch', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_15', app.config['MATOMO_URL'], 'Pages Following a Site Search', 'Actions', 'getPageUrlsFollowingSiteSearch', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_16', app.config['MATOMO_URL'], 'Search Categories', 'Actions', 'getSiteSearchCategories', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_17', app.config['MATOMO_URL'], 'Site Search Keyword', 'Actions', 'getSiteSearchKeywords', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_18', app.config['MATOMO_URL'], 'Search Keywords With No Results', 'Actions', 'getSiteSearchNoResultKeywords', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+            </div>
+            {% endif %}
+
+            {% endif %}
+
+    {% endif %}
+
+{% endblock %}
+
+{% block footer %}
+    {% if g.idSite is not none %}
+    {% include "analytics/_iframe_resize.html" %}
+    {% endif %}
+{% endblock %}

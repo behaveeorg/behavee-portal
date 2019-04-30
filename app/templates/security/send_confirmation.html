@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% from "security/_macros.html" import render_field, render_field_with_errors, render_checkbox_field %}
+{% include "security/_messages.html" %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <div id="body" class="ui middle aligned center aligned grid">
+        <div class="column left aligned" style="min-width:280px; max-width:40%">
+			<div class="main ui center segment">
+				<form class="ui form form-user" action="{{ url_for_security('send_confirmation') }}" method="post" name="send_confirmation_form">
+					<h4 class="ui dividing header">{{ _('Resend confirmation instructions') }}</h4>
+						{{ send_confirmation_form.hidden_tag() }}
+						{{ render_field_with_errors(send_confirmation_form.email) }}
+					<input class="ui primary button" type="submit">
+				</form>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

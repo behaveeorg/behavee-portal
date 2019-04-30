@@ -1,0 +1,139 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<!-- Browser tab name -->
+		<title>Behavee portal</title>
+		<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'/>
+		<meta charset="UTF-8">
+		<link rel="shortcut icon" href="/static/img/favicon.ico">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="/static/js/jquery.browser.js"></script>
+        <script src="/static/js/jquery-iframe-auto-height.js"></script>
+		<link rel="stylesheet" href="/static/semantic/dist/semantic.css"/>
+		<link rel="stylesheet" href="/static/css/calendar.min.css"/>
+
+        <script src="/static/semantic/dist/semantic.js"></script>
+        <script src="/static/js/calendar.min.js"></script>
+        <script src="/static/js/moment-with-locales.js"></script>
+        <script src="/static/js/URI.js"></script>
+
+            <script type="text/javascript">
+		if (window.location.hash && window.location.hash == '#_=_') {
+			if (window.history && history.pushState) {
+				window.history.pushState("", document.title, window.location.pathname);
+			} else {
+				// Prevent scrolling by storing the page's current scroll offset
+				var scroll = {
+					top: document.body.scrollTop,
+					left: document.body.scrollLeft
+				};
+				window.location.hash = '';
+				// Restore the scroll offset, should be flicker free
+				document.body.scrollTop = scroll.top;
+				document.body.scrollLeft = scroll.left;
+			}
+		}
+		</script>
+		<!-- Behavee Code -->
+<script type="text/javascript">
+var _paq = _paq || [];
+_paq.push(['trackPageView']);
+_paq.push(['enableLinkTracking']);
+(function() {
+    var u="https://analytics.behavee.com/";
+    _paq.push(['setTrackerUrl', u+'js/index.php']);
+    _paq.push(['setSiteId', '50']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'js/index.php'; s.parentNode.insertBefore(g,s);
+})();
+</script>
+<!-- End Behavee Code -->
+		<link rel="stylesheet" href="/static/css/custom.css">
+
+	</head>
+	<body>
+		<div id="header" class="ui container">
+
+
+			<div class="ui inverted menu">
+				<a href="/" target="_self"><img src="/static/img/logo-header.png" class="item ui image small"></a>
+
+			</div>
+
+
+		</div>
+
+		<!-- Message flashing -->
+
+
+
+
+		<!-- Block content -->
+
+
+
+
+    <!-- non-authenticated user -->
+
+    <div class="ui container response">
+        <div class="response content">
+            <p></p>
+        </div>
+    </div>
+
+    <div id="body" class="ui middle aligned center aligned grid">
+        <div class="column">
+
+            <div class="ui vertical masthead center aligned segment">
+                <div class="ui text container">
+            <div class="mainWrap navslide">
+                <div class="ui equal width left aligned padded grid stackable">
+				<!-- message flashing -->
+				{% with messages = get_flashed_messages(with_categories=true) %}
+					{% if messages %}
+						{% for category, message in messages %}
+                        <div class="row">
+                            <div class="sixteen wide column">
+								<div class="ui {{ category }} message">
+									<div class="content">
+										<p>{{ message }}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						{% endfor %}
+					{% endif %}
+				{% endwith %}
+                </div>
+            </div>
+
+            <div class="ui vertical masthead center aligned segment">
+                <div class="ui text container">
+                    <h1 class="ui header">Behavee Portal</h1>
+                    <h2>New standard in hyper-personalized offering.</h2>
+                    <p>More business opportunities and money from interconnection with business partners.<br>
+                        It is open so you have more business insights from other business segments.<br>
+                        It is GDPR compliant so your data and data of your visitors will not exceeds <br>
+                        the regulatory sets by your national government.
+                    </p>
+                </div>
+
+            </div>
+            <br><br>
+            <div class="ui vertical masthead center aligned segment">
+                <div class="ui text container">
+                    <h3>Login to Behavee Portal</h3>
+                    <a class="ui blue button extra large" href="/users/login">Login</a>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+	</body>
+</html>

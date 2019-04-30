@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% from "analytics/_macros.html" import render_matomo_widget %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+        <div class="row">
+            <div class="sixteen wide column">
+            {% include "_sites_picker.html" %}
+            {% include "_date_picker.html" %}
+            </div>
+        </div>
+        <!-- main content -->
+
+        {% if g.idSite is not none %}
+
+            {% if pageAction == 'all' %}
+            <div class="sixteen wide tablet two wide computer column">
+                <div class="ui vertical secondary pointing fluid tabular menu">
+                    <a class="item active" data-tab="overview">
+                        Overview
+                    </a>
+                    <a class="item" data-tab="multi">
+                        Multi Channel Conversion Attribution
+                    </a>
+                </div>
+            </div>
+            <div class="sixteen wide tablet fourteen wide computer column">
+                <div class="ui tab active" data-tab="overview">
+                {{ render_matomo_widget('widget_01', app.config['MATOMO_URL'], 'Overview', 'CoreHome', 'renderWidgetContainer', '&containerId=GoalsOverview', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', true) }}
+                </div>
+                <div class="ui tab" data-tab="multi">
+                {{ render_matomo_widget('widget_02', app.config['MATOMO_URL'], 'Multi Channel Conversion Attribution', 'MultiChannelConversionAttribution', 'getMultiAttribution', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+            </div>
+            {% endif %}
+
+        {% endif %}
+
+    {% endif %}
+
+{% endblock %}
+
+{% block footer %}
+    {% if g.idSite is not none %}
+    {% include "analytics/_iframe_resize.html" %}
+    {% endif %}
+{% endblock %}

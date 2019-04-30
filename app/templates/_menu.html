@@ -1,0 +1,156 @@
+{% from "analytics/_macros.html" import render_menu_item_transition %}
+{% if current_user.is_authenticated %}
+<!-- Menu full -->
+<div class="ui accordion inverted">
+    <a href="{{ behavee_url_for('index') }}">
+    <div class="title item {{menuDashboard}}">
+        <i class="ion-ios-speedometer titleIcon icon"></i> Dashboard
+    </div>
+    </a>
+    <div class="title item {{menuAnalyticsVisitors}}{{menuAnalyticsBehaviour}}{{menuAnalyticsAcquisition}}{{menuAnalyticsCampaigns}}{{menuAnalyticsEcommerce}}{{menuAnalyticsProducts}}{{menuAnalyticsSales}}{{menuAnalyticsGoals}}{{menuAnalyticsFunnels}}{{menuAnalyticsSEO}}">
+        <i class="ion-arrow-graph-up-right titleIcon icon"></i>
+        <i class="dropdown icon"></i> Analytics
+    </div>
+    <div class="content {{menuAnalyticsVisitors}}{{menuAnalyticsBehaviour}}{{menuAnalyticsAcquisition}}{{menuAnalyticsCampaigns}}{{menuAnalyticsEcommerce}}{{menuAnalyticsProducts}}{{menuAnalyticsSales}}{{menuAnalyticsGoals}}{{menuAnalyticsFunnels}}{{menuAnalyticsSEO}}">
+        <a class="item {{render_menu_item_transition(menuAnalyticsVisitors)}}" href="{{ behavee_url_for('analytics_visitors', action='all') }}">Visitors</a>
+        <a class="item {{render_menu_item_transition(menuAnalyticsBehaviour)}}" href="{{ behavee_url_for('analytics_behaviour', action='all') }}">Behaviour</a>
+        <a class="item {{render_menu_item_transition(menuAnalyticsAcquisition)}}" href="{{ behavee_url_for('analytics_acquisition', action='all') }}">Acquisition</a>
+        <a class="item {{render_menu_item_transition(menuAnalyticsCampaigns)}}" href="{{ behavee_url_for('analytics_acquisition', action='all') }}">Campaigns</a>
+        {% if current_site.ecommerce %}
+        <a class="item {{render_menu_item_transition(menuAnalyticsEcommerce)}}" href="{{ behavee_url_for('analytics_ecommerce', action='all') }}">Ecommerce</a>
+        <a class="item {{render_menu_item_transition(menuAnalyticsProducts)}}" href="{{ behavee_url_for('analytics_products', action='all') }}">Products</a>
+        <a class="item {{render_menu_item_transition(menuAnalyticsSales)}}" href="{{ behavee_url_for('analytics_sales', action='all') }}">Sales</a>
+        <a class="item {{render_menu_item_transition(menuAnalyticsGoals)}}" href="{{ behavee_url_for('analytics_goals', action='all') }}">Goals</a>
+        <a class="item {{render_menu_item_transition(menuAnalyticsFunnels)}}" href="{{ behavee_url_for('analytics_funnels', action='all') }}">Funnels</a>
+        {% endif %}
+        <a class="item {{render_menu_item_transition(menuAnalyticsSEO)}}" href="{{ behavee_url_for('analytics_seo', idSite=g.idSite) }}">SEO</a>
+    </div>
+    <div class="ui divider"></div>
+    <div class="title item {{menuWebsitesNew}}{{menuWebsitesList}}">
+        <i class="file alternate titleIcon icon"></i>
+        <i class="dropdown icon"></i> Websites
+    </div>
+    <div class="content {{menuWebsitesNew}}{{menuWebsitesList}}">
+        <a class="item {{render_menu_item_transition(menuWebsitesNew)}}" href="{{ url_for('analytics_sites_add', idSite=g.idSite) }}">Add New</a>
+        <a class="item {{render_menu_item_transition(menuWebsitesList)}}" href="{{ url_for('analytics_sites') }}">List</a>
+    </div>
+    <div class="title item {{menuHeatmapsNew}}{{menuHeatmapsList}}">
+        <i class="fire titleIcon icon"></i>
+        <i class="dropdown icon"></i> Heatmaps
+    </div>
+    <div class="content {{menuHeatmapsNew}}{{menuHeatmapsList}}">
+        <a class="item {{render_menu_item_transition(menuHeatmapsNew)}}" href="{{ url_for('analytics_heatmaps_add', idSite=g.idSite) }}">Add New</a>
+        <a class="item {{render_menu_item_transition(menuHeatmapsList)}}" href="{{ url_for('analytics_heatmaps', idSite=g.idSite) }}">List</a>
+    </div>
+    <div class="title item {{menuSessionRecordingsNew}}{{menuSessionRecordingsList}}">
+        <i class="play circle outline titleIcon icon"></i>
+        <i class="dropdown icon"></i> Session Recording
+    </div>
+    <div class="content {{menuSessionRecordingsNew}}{{menuSessionRecordingsList}}">
+        <a class="item {{render_menu_item_transition(menuSessionRecordingsNew)}}" href="{{ url_for('analytics_session_recordings_add', idSite=g.idSite) }}">Add New</a>
+        <a class="item {{render_menu_item_transition(menuSessionRecordingsList)}}" href="{{ url_for('analytics_session_recordings', idSite=g.idSite) }}">List</a>
+    </div>
+    <div class="ui divider"></div>
+    <a href="{{ behavee_url_for('api') }}" target="_blank">
+    <div class="title item">
+        <i class="sync alternate titleIcon icon"></i> API
+    </div>
+    </a>
+    <div class="title item {{menuSettingsProfile}}{{menuSettingsPartner}}">
+        <i class="cog titleIcon icon"></i>
+        <i class="dropdown icon"></i> Settings
+    </div>
+    <div class="content {{menuSettingsProfile}}{{menuSettingsPartner}}">
+        <a class="item {{render_menu_item_transition(menuSettingsProfile)}}" href="{{ url_for('account_profile') }}">Account</a>
+        <a class="item {{render_menu_item_transition(menuSettingsPartner)}}" href="{{ url_for('partner_profile_view') }}">Partner</a>
+    </div>
+</div>
+<!-- Menu lite -->
+<div class="ui dropdown item displaynone scrolling">
+    <span>Dashboard</span>
+    <i class="ion-speedometer icon"></i>
+    <div class="menu">
+        <div class="header">
+            Dashboard
+        </div>
+        <div class="ui divider"></div>
+        <a class="item {{ mAnalyticsDashboard }}" href="{{ behavee_url_for('index') }}">
+        Dashboard
+    </a>
+    </div>
+</div>
+<div class="ui dropdown item displaynone scrolling">
+    <span>Analytics</span>
+    <i class="ion-ios-lightbulb icon"></i>
+    <div class="menu ">
+        <div class="header">
+            Analytics
+        </div>
+        <div class="ui divider"></div>
+        <a class="item" href="{{ behavee_url_for('analytics_visitors', action='all') }}">Visitors</a>
+        <a class="item" href="{{ behavee_url_for('analytics_behaviour', action='all') }}">Behaviour</a>
+        <a class="item" href="{{ behavee_url_for('analytics_acquisition', action='all') }}">Acquisition</a>
+        <a class="item" href="{{ behavee_url_for('analytics_acquisition', action='all') }}">Campaigns</a>
+        {% if current_site.ecommerce %}
+        <a class="item" href="{{ behavee_url_for('analytics_ecommerce', action='all') }}">Ecommerce</a>
+        <a class="item" href="{{ behavee_url_for('analytics_products', action='all') }}">Products</a>
+        <a class="item" href="{{ behavee_url_for('analytics_sales', action='all') }}">Sales</a>
+        <a class="item" href="{{ behavee_url_for('analytics_goals', action='all') }}">Goals</a>
+        {% endif %}
+        <a class="item" href="{{ behavee_url_for('analytics_seo', idSite=g.idSite) }}">SEO</a>
+    </div>
+</div>
+<div class="ui dropdown item displaynone scrolling">
+    <span>Websites</span>
+    <i class="file alternate icon"></i>
+    <div class="menu">
+        <div class="header">Websites</div>
+        <div class="ui divider"></div>
+        <a class="item" href="{{ url_for('analytics_sites_add', idSite=g.idSite) }}">Add New</a>
+        <a class="item" href="{{ url_for('analytics_sites') }}">List</a>
+    </div>
+</div>
+<div class="ui dropdown item displaynone scrolling">
+    <span>Heatmaps</span>
+    <i class="fire icon"></i>
+    <div class="menu">
+        <div class="header">Heatmaps</div>
+        <div class="ui divider"></div>
+        <a class="item" href="{{ url_for('analytics_heatmaps_add', idSite=g.idSite) }}">Add New</a>
+        <a class="item" href="{{ url_for('analytics_heatmaps', idSite=g.idSite) }}">List</a>
+    </div>
+</div>
+<div class="ui dropdown item displaynone scrolling">
+    <span>Session Recording</span>
+    <i class="play circle outline icon"></i>
+    <div class="menu">
+        <div class="header">Session Recording</div>
+        <div class="ui divider"></div>
+        <a class="item" href="{{ url_for('analytics_session_recordings_add', idSite=g.idSite) }}">Add New</a>
+        <a class="item" href="{{ url_for('analytics_session_recordings', idSite=g.idSite) }}">List</a>
+    </div>
+</div>
+<div class="ui dropdown item displaynone scrolling">
+    <span>API</span>
+    <i class="sync alternate icon"></i>
+    <div class="menu">
+        <div class="header">
+            API versions
+        </div>
+        <div class="ui divider"></div>
+        <a class="item" href="{{ behavee_url_for('api') }}" target="_blank">
+        API v1
+    </a>
+    </div>
+</div>
+<div class="ui dropdown item displaynone scrolling">
+    <span>Settings</span>
+    <i class="cog icon"></i>
+    <div class="menu">
+        <div class="header">Settings</div>
+        <div class="ui divider"></div>
+        <a class="item" href="{{ url_for('account_profile') }}">Account</a>
+        <a class="item" href="{{ url_for('partner_profile_view') }}">Partner</a>
+    </div>
+</div>
+{% endif %}

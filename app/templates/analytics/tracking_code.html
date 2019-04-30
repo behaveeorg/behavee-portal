@@ -1,0 +1,17 @@
+<!-- Behavee Analytics -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(['setDocumentTitle', document.domain + "/" + document.title]);
+  _paq.push(['setCookieDomain', '{{ site.main_url }}']);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="{{ app.config['MATOMO_TRACKING_URL'] }}";
+    _paq.push(['setTrackerUrl', u+'js/']);
+    _paq.push(['setSiteId', '{{ site.idsite }}']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'js/';
+    s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- Behavee Analytics -->

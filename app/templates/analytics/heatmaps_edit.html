@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% from "analytics/_macros.html" import render_field, render_field_with_errors, render_checkbox_field, render_subform_field_with_errors, render_rules_js %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+        <div class="row">
+            <div class="sixteen wide column">
+                <div class="ui segments">
+                    <div class="ui segment">
+                        <h3 class="left floated left aligned six wide column">
+                            Edit Heatmap
+                        </h3>
+                    </div>
+                    <div class="ui segment">
+                    <form class="ui form form-user" action="{{ url_for('analytics_heatmaps_edit', idSite=idsite, idsitehsr=idsitehsr) }}" method="post" name="heatmap_edit_form">
+
+                    {{ heatmap_edit_form.hidden_tag() }}
+                        {{ render_field_with_errors(heatmap_edit_form.name) }}
+                        <div class="two fields">
+                        {{ render_field_with_errors(heatmap_edit_form.sample_limit) }}
+                        {{ render_field_with_errors(heatmap_edit_form.sample_rate) }}
+                        </div>
+                        {{ render_field_with_errors(heatmap_edit_form.excluded_elements) }}
+                        {{ render_field_with_errors(heatmap_edit_form.screenshot_url) }}
+                        <div class="two fields">
+                        {{ render_field_with_errors(heatmap_edit_form.breakpoint_mobile) }}
+                        {{ render_field_with_errors(heatmap_edit_form.breakpoint_tablet) }}
+                        </div>
+
+                        <div id="rules-editor">
+                            <input type="hidden" id="count_rules" name="count_rules" value="{{ count_rules }}">
+                            <div id="ruleset-list">
+                                {% for i in range(count_rules) %}
+                                <div class="ruleset">
+                                    <div class="four fields">
+                                    {{ render_field_with_errors(heatmap_edit_form|attr("rules_attribute_%s" % i)) }}
+                                    {{ render_field_with_errors(heatmap_edit_form|attr("rules_type_%s" % i)) }}
+                                    {{ render_field_with_errors(heatmap_edit_form|attr("rules_value_%s" % i)) }}
+                                    {{ render_field_with_errors(heatmap_edit_form|attr("rules_value2_%s" % i)) }}
+                                    </div>
+                                    {% if i > 0 %}<button class="ui negative basic button delete-ruleset" type="button">Delete Rule</button>{% endif %}
+                                    <div class="ui divider"></div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <button id="add-rule" class="ui primary basic button" type="button">Add Rule</button>
+                        </div>
+
+                    <div class="ui divider"></div>
+                    <input class="ui primary button" type="submit" id="submit">
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ render_rules_js(heatmap_edit_form) }}
+    {% endif %}
+
+{% endblock %}

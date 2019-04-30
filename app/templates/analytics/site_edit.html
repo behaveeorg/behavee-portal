@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% from "analytics/_macros.html" import render_field, render_field_with_errors, render_checkbox_field %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+	<div class="row">
+		<div class="sixteen wide column">
+			<div class="ui segments">
+				<div class="ui segment">
+					<h5 class="ui header">
+						Add site
+					</h5>
+				</div>
+				<div class="ui segment">
+					<form class="ui form form-user" action="/analytics/sites/{{idSite}}/edit" method="post" name="site_edit_form">
+
+						{{ site_edit_form.hidden_tag() }}
+						{{ render_field_with_errors(site_edit_form.name) }}
+						{{ render_field_with_errors(site_edit_form.main_url) }}
+						<div class="two fields">
+						{{ render_field_with_errors(site_edit_form.exclude_unknown_urls) }}
+						{{ render_field_with_errors(site_edit_form.keep_url_fragments) }}
+						</div>
+						{{ render_field_with_errors(site_edit_form.excluded_ips) }}
+						{{ render_field_with_errors(site_edit_form.excluded_user_agents) }}
+						{{ render_field_with_errors(site_edit_form.excluded_parameters) }}
+						<div class="two fields">
+						{{ render_field_with_errors(site_edit_form.sitesearch_keyword_parameters) }}
+						{{ render_field_with_errors(site_edit_form.sitesearch_category_parameters) }}
+						</div>
+						<div class="two fields">
+						{{ render_field_with_errors(site_edit_form.timezone) }}
+						{{ render_field_with_errors(site_edit_form.sitesearch) }}
+						</div>
+						<div class="two fields">
+						{{ render_field_with_errors(site_edit_form.ecommerce) }}
+						{{ render_field_with_errors(site_edit_form.currency) }}
+						</div>
+						<div class="two fields">
+						{{ render_field_with_errors(site_edit_form.package) }}
+						</div>
+
+						<input class="ui primary button" type="submit" id="submit">
+						<a class="ui button" href="{{ url_for('index') }}">Cancel</a>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,5 @@
+{% from "macros.html" import render_sites_select %}
+
+{% if current_user.is_authenticated %}
+    {{ render_sites_select(session['matomo_sites'], g.idSite) }}
+{% endif %}

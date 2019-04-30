@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% from "security/_macros.html" import render_field, render_field_with_errors, render_checkbox_field %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+    <div id="body">
+
+        <div class="ui two column stackable grid container">
+            <div class="two wide column">
+            {% include "_menu.html" %}
+            </div>
+
+            <div class="fourteen wide column">
+
+                {% include "_sites_picker.html" %}
+
+{#                {% for site in site %}#}
+                <div class="ui segment">
+                <!-- main content -->
+                    <div class="ui left aligned grid">
+                        <div class="left floated left aligned six wide column">
+                            <h2>{{ site.name }}</h2>
+                        </div>
+                    </div>
+
+                    {% if site.idsite == '35' %}
+                    <iframe width="1200" height="800" src="https://app.powerbi.com/view?r=eyJrIjoiYjI3M2FjOGUtMDgzMC00MGI3LTkyYzItZmU1NDZkZGY3Y2M4IiwidCI6ImEzYTk1MmNjLTBmZjYtNDY5Mi1iNDI0LTdmY2NlNzZjNDc0NyIsImMiOjl9" frameborder="0" allowFullScreen="true"></iframe>
+                    {% else %}
+                    <div><br>
+                    Report is not available for this site.
+                    </div>
+                    {% endif %}
+
+                </div>
+{#                {% endfor %}#}
+
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+{% endblock %}

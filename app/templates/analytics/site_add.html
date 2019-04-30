@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% from "analytics/_macros.html" import render_field, render_field_with_errors, render_checkbox_field %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+
+<!-- authenticated user -->
+{% if current_user.is_authenticated %}
+    <div class="row">
+        <div class="sixteen wide column">
+            <div class="ui segments">
+                <div class="ui segment">
+                    <h3 class="left floated left aligned six wide column">Add site</h3>
+                </div>
+                <div class="ui segment">
+                    <form class="ui form form-user" action="{{ url_for('analytics_sites_add') }}" method="post" name="site_add_form">
+
+                        {{ site_add_form.hidden_tag() }}
+                        {{ render_field_with_errors(site_add_form.name) }}
+                        {{ render_field_with_errors(site_add_form.main_url) }}
+                        <div class="two fields">
+                            {{ render_field_with_errors(site_add_form.exclude_unknown_urls) }}
+                            {{ render_field_with_errors(site_add_form.keep_url_fragments) }}
+                        </div>
+                        {{ render_field_with_errors(site_add_form.excluded_ips) }}
+                        {{ render_field_with_errors(site_add_form.excluded_user_agents) }}
+                        {{ render_field_with_errors(site_add_form.excluded_parameters) }}
+                        <div class="two fields">
+                            {{ render_field_with_errors(site_add_form.sitesearch_keyword_parameters) }}
+                            {{ render_field_with_errors(site_add_form.sitesearch_category_parameters) }}
+                        </div>
+                        <div class="two fields">
+                            {{ render_field_with_errors(site_add_form.timezone) }}
+                            {{ render_field_with_errors(site_add_form.sitesearch) }}
+                        </div>
+                        <div class="two fields">
+                            {{ render_field_with_errors(site_add_form.ecommerce) }}
+                            {{ render_field_with_errors(site_add_form.currency) }}
+                        </div>
+                        <div class="two fields">
+                            {{ render_field_with_errors(site_add_form.package) }}
+                        </div>
+                        <input class="ui primary button" type="submit" id="submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}

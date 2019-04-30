@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+{% from "analytics/_macros.html" import render_matomo_widget %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+        <div class="row">
+            <div class="sixteen wide column">
+            {% include "_sites_picker.html" %}
+            {% include "_date_picker.html" %}
+            </div>
+        </div>
+        <!-- main content -->
+
+        {% if g.idSite is not none %}
+            {% if pageAction == 'all' %}
+            <div class="sixteen wide tablet two wide computer column">
+                <div class="ui vertical secondary pointing fluid tabular menu">
+                    <a class="item active" data-tab="overview">
+                        Overview
+                    </a>
+                    <a class="item" data-tab="visitorLog">
+                        Visitor Log
+                    </a>
+                    <a class="item" data-tab="devices">
+                        Devices
+                    </a>
+                    <a class="item" data-tab="software">
+                        Software
+                    </a>
+                    <a class="item" data-tab="engagement">
+                        Engagement
+                    </a>
+                    <a class="item" data-tab="times">
+                        Times
+                    </a>
+                    <a class="item" data-tab="location">
+                        Location
+                    </a>
+                </div>
+            </div>
+            <div class="sixteen wide tablet fourteen wide computer column">
+                <div class="ui tab active" data-tab="overview">
+                {{ render_matomo_widget('widget_01', app.config['MATOMO_URL'], 'Visits Overview', 'CoreHome', 'renderWidgetContainer', '&containerId=VisitOverviewWithGraph', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', true) }}
+                </div>
+                <div class="ui tab" data-tab="visitorLog">
+                {{ render_matomo_widget('widget_02', app.config['MATOMO_URL'], 'Realtime Map', 'UserCountryMap', 'realtimeMap', '', g.idSite, session['matomo_token_auth'], request_period, request_date, 400, '', false) }}
+                {{ render_matomo_widget('widget_03', app.config['MATOMO_URL'], 'Visitor Log', 'Live', 'getLastVisitsDetails', '&forceView=1&viewDataTable=VisitorLog&small=1', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+                <div class="ui tab" data-tab="devices">
+                {{ render_matomo_widget('widget_04', app.config['MATOMO_URL'], 'Device Brand', 'DevicesDetection', 'getBrand', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_05', app.config['MATOMO_URL'], 'Device Model', 'DevicesDetection', 'getModel', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_06', app.config['MATOMO_URL'], 'Device Type', 'DevicesDetection', 'getType', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_07', app.config['MATOMO_URL'], 'Device Resolution', 'Resolution', 'getResolution', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+                <div class="ui tab" data-tab="software">
+                {{ render_matomo_widget('widget_08', app.config['MATOMO_URL'], 'Browser Plugins', 'DevicePlugins', 'getPlugin', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_09', app.config['MATOMO_URL'], 'Browser Engines', 'DevicesDetection', 'getBrowserEngines', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+                <div class="ui tab" data-tab="engagement">
+                {{ render_matomo_widget('widget_10', app.config['MATOMO_URL'], 'Returning Visits Over Time', 'VisitFrequency', 'getEvolutionGraph', '&forceView=1&viewDataTable=graphEvolution', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_11', app.config['MATOMO_URL'], 'Frequency Overview', 'VisitFrequency', 'get', '&forceView=1&viewDataTable=sparklines', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_12', app.config['MATOMO_URL'], 'Visits by Days Since Last Visit', 'VisitorInterest', 'getNumberOfVisitsByDaysSinceLast', '', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_13', app.config['MATOMO_URL'], 'Visits by Visit Number', 'VisitorInterest', 'getNumberOfVisitsByVisitCount', '', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_14', app.config['MATOMO_URL'], 'Visits per Number of Pages', 'VisitorInterest', 'getNumberOfVisitsPerPage', '', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_15', app.config['MATOMO_URL'], 'Visits per Visit Duration', 'VisitorInterest	', 'getNumberOfVisitsPerVisitDuration', '', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+                <div class="ui tab" data-tab="times">
+                {{ render_matomo_widget('widget_16', app.config['MATOMO_URL'], 'Visits by Day of Week', 'VisitTime', 'getByDayOfWeek', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_17', app.config['MATOMO_URL'], 'Visits per Local Time', 'VisitTime', 'getVisitInformationPerLocalTime', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_18', app.config['MATOMO_URL'], 'Visits per Server Time', 'VisitTime', 'getVisitInformationPerServerTime', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+                <div class="ui tab" data-tab="location">
+                {{ render_matomo_widget('widget_19', app.config['MATOMO_URL'], 'Visitor Map', 'UserCountryMap', 'visitorMap', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 400, '', false) }}
+                {{ render_matomo_widget('widget_20', app.config['MATOMO_URL'], 'Continent', 'UserCountry', 'getContinent', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_21', app.config['MATOMO_URL'], 'Country', 'UserCountry', 'getCountry', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_22', app.config['MATOMO_URL'], 'Region', 'UserCountry', 'getRegion', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_23', app.config['MATOMO_URL'], 'City', 'UserCountry', 'getCity', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_24', app.config['MATOMO_URL'], 'Providers', 'Provider', 'getProvider', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_25', app.config['MATOMO_URL'], 'Browser Language', 'UserLanguage', 'getLanguage', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_26', app.config['MATOMO_URL'], 'Language Code', 'UserLanguage', 'getLanguageCode', '&filter_limit=10', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+            </div>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block footer %}
+    {% if g.idSite is not none %}
+    {% include "analytics/_iframe_resize.html" %}
+    {% endif %}
+{% endblock %}

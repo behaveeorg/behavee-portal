@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+{% from "analytics/_macros.html" import render_matomo_widget %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+        <div class="row">
+            <div class="sixteen wide column">
+            {% include "_sites_picker.html" %}
+            {% include "_date_picker.html" %}
+            </div>
+        </div>
+        <!-- main content -->
+
+        {% if g.idSite is not none %}
+
+            {% if pageAction == 'all' %}
+            <div class="sixteen wide tablet two wide computer column">
+                <div class="ui vertical secondary pointing fluid tabular menu">
+                    <a class="item active" data-tab="device">
+                        Sales by Device
+                    </a>
+                    <a class="item" data-tab="location">
+                        Sales by User Location
+                    </a>
+                    <a class="item" data-tab="referrers">
+                        Sales by Referrers
+                    </a>
+                    <a class="item" data-tab="attributes">
+                        Sales by User Attribute
+                    </a>
+                    <a class="item" data-tab="engagement">
+                        Sales Engagement
+                    </a>
+                </div>
+            </div>
+            <div class="sixteen wide tablet fourteen wide computer column">
+                <div class="ui tab active" data-tab="device">
+                {{ render_matomo_widget('widget_01', app.config['MATOMO_URL'], 'Sales by Device: Device brand', 'DevicesDetection', 'getBrand', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', true) }}
+                {{ render_matomo_widget('widget_02', app.config['MATOMO_URL'], 'Sales by Device: Device model', 'DevicesDetection', 'getModel', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', true) }}
+                {{ render_matomo_widget('widget_03', app.config['MATOMO_URL'], 'Sales by Device: Device type', 'DevicesDetection', 'getType', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', true) }}
+                </div>
+                <div class="ui tab" data-tab="location">
+                {{ render_matomo_widget('widget_04', app.config['MATOMO_URL'], 'Sales by User Location: Continent', 'UserCountry', 'getContinent', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_05', app.config['MATOMO_URL'], 'Sales by User Location: Country', 'UserCountry', 'getCountry', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_06', app.config['MATOMO_URL'], 'Sales by User Location: Region', 'UserCountry', 'getRegion', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_07', app.config['MATOMO_URL'], 'Sales by User Location: City', 'UserCountry', 'getCity', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+                <div class="ui tab" data-tab="referrers">
+                {{ render_matomo_widget('widget_08', app.config['MATOMO_URL'], 'Sales by Referrers: Campaigns Contents', 'MarketingCampaignsReporting', 'getContent', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_09', app.config['MATOMO_URL'], 'Sales by Referrers: Campaigns Keywords', 'MarketingCampaignsReporting', 'getKeyword', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_10', app.config['MATOMO_URL'], 'Sales by Referrers: Campaigns Mediums', 'MarketingCampaignsReporting', 'getMedium', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_11', app.config['MATOMO_URL'], 'Sales by Referrers: Campaigns Names', 'MarketingCampaignsReporting', 'getName', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_12', app.config['MATOMO_URL'], 'Sales by Referrers: Campaigns Source - Medium', 'MarketingCampaignsReporting', 'getSourceMedium', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_13', app.config['MATOMO_URL'], 'Sales by Referrers: Campaigns Sources', 'MarketingCampaignsReporting', 'getSource', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_14', app.config['MATOMO_URL'], 'Sales by Referrers: Keywords', 'Referrers', 'getKeywords', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_15', app.config['MATOMO_URL'], 'Sales by Referrers: Referrer Type', 'Referrers', 'getReferrerType', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_16', app.config['MATOMO_URL'], 'Sales by Referrers: Search Engines', 'Referrers', 'getSearchEngines', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_17', app.config['MATOMO_URL'], 'Sales by Referrers: Websites', 'Referrers', 'getWebsites', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+                <div class="ui tab" data-tab="attributes">
+                {{ render_matomo_widget('widget_18', app.config['MATOMO_URL'], 'Sales by User Attribute: Custom Variables', 'CustomVariables', 'getCustomVariables', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_19', app.config['MATOMO_URL'], 'Sales by User Attribute: Visits per server time', 'VisitTime', 'getVisitInformationPerServerTime', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+                <div class="ui tab" data-tab="engagement">
+                {{ render_matomo_widget('widget_20', app.config['MATOMO_URL'], 'Sales Engagement: Days to Conversion', 'Goals', 'getDaysToConversion', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                {{ render_matomo_widget('widget_21', app.config['MATOMO_URL'], 'Sales Engagement: Visits to Conversion', 'Goals', 'getVisitsUntilConversion', '&forceView=1&viewDataTable=tableGoals&documentationForGoalsPage=1&idGoal=ecommerceOrder', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+            </div>
+            {% endif %}
+
+        {% endif %}
+
+    {% endif %}
+
+{% endblock %}
+
+{% block footer %}
+    {% if g.idSite is not none %}
+    {% include "analytics/_iframe_resize.html" %}
+    {% endif %}
+{% endblock %}

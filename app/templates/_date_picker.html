@@ -1,0 +1,328 @@
+<div class="ui left labeled button" tabindex="0">
+    <span class="ui basic label">
+        {{ date_picker_label|safe }}
+    </span>
+    <div class="ui icon button" id="date-picker-button">
+        <i class="calendar alternate outline icon"></i>
+    </div>
+</div>
+
+
+<div id="date-picker-modal" class="ui modal">
+    <div class="header">Please select interval</div>
+    <div class="content">
+        <div class="ui grid container">
+            <div class="three wide column">
+                <div class="ui vertical basic buttons">
+                    <button id="date-picker-select-day" class="ui button" onclick="behavee_date_picker.select(this, 'day')">Day</button>
+                    <button id="date-picker-select-week" class="ui button" onclick="behavee_date_picker.select(this, 'week')">Week</button>
+                    <button id="date-picker-select-month" class="ui button" onclick="behavee_date_picker.select(this, 'month')">Month</button>
+                    <button id="date-picker-select-year" class="ui button" onclick="behavee_date_picker.select(this, 'year')">Year</button>
+                    <button id="date-picker-select-range" class="ui button" onclick="behavee_date_picker.select(this, 'range')">Date Range</button>
+                </div>
+            </div>
+            <div class="six wide column">
+                <div class="ui calendar" id="date-picker"></div>
+            </div>
+            <div class="six wide column" id="date-picker-range-container"></div>
+        </div>
+    </div>
+    <div class="actions">
+        <button class="ui primary button" onclick="behavee_date_picker.confirm()">Select</button>
+        <div class="ui cancel button">Cancel</div>
+    </div>
+</div>
+
+<script>
+    
+function BehaveeDatePicker(init_period, init_date, init_date2) {
+    self = this;
+
+    this.DATE_FORMAT = 'YYYY-MM-DD';
+
+    this.calendar = null;
+    this.range_calendar = null;
+    this._selected_date = [];
+    this._custom_mode = null;
+
+    var tomorrow = moment().add(1, 'day').hours(0).minutes(0).seconds(0);
+
+    function selectDate(period, start, end) {
+        start = moment(start).format(self.DATE_FORMAT);
+        self._selected_date = {
+            period: period,
+            date: [start]
+        };
+
+        if (end) {
+            end = moment(end).format(self.DATE_FORMAT);
+            self._selected_date.date.push(end)
+        }
+    }
+
+    function initCalendar() {
+        if (self.calendar) return; // short-circuit;
+
+        var calendar_initial_date = init_date ? moment(init_date).toDate() : null;
+
+        switch (init_period) {
+            case 'year':
+                var calendar_start_mode = 'year';
+                break;
+            case 'month':
+                var calendar_start_mode = 'month';
+                break;
+            case 'week':
+                self._custom_mode = 'week';
+                var calendar_start_mode = 'day';
+                break;
+            default:
+                var calendar_start_mode = 'day';
+        }
+
+        if (init_period) {
+            var select_el = jQuery('#date-picker-select-' + init_period)
+        } else {
+            var select_el = jQuery('#date-picker-select-day')
+        }
+        select_el.addClass('active');
+
+        self.calendar = jQuery('#date-picker').calendar({
+            type: 'date',
+            startMode: calendar_start_mode,
+            firstDayOfWeek: 1,
+            monthFirst: false,
+            inline: true,
+            initialDate: calendar_initial_date,
+            formatter: {
+                /* cell: function(cell, date, cellOptions) {
+                    var new_cell = cell;
+                    function _format_cell(onclick) {
+                        cell = jQuery(cell[0]);
+                        var replacement_cell = cell.clone();
+
+                        replacement_cell.click(function () {
+                            replacement_cell.parents('table').find('td').removeClass('active');
+                            replacement_cell.addClass('active');
+                            onclick(replacement_cell, date, cellOptions);
+                        });
+                        cell.replaceWith(replacement_cell);  // This was the only way I could clear the onClick events :(
+
+                        return new_cell
+                     }
+
+                    switch (cellOptions.mode) {
+                        case 'year':
+                            new_cell = _format_cell(function () {
+                                selectDate('year', moment(date).month(0).date(1));
+                            });
+                            break;
+                        case 'month':
+                            new_cell = _format_cell(function () {
+                                selectDate('month', moment(date).date(1));
+                            });
+                            break;
+                        case 'day':
+                            if (self._custom_mode === 'week') {
+                                if (tomorrow < date) {
+                                    cell.addClass('future_day');
+                                }
+                                new_cell = _format_cell(function (_cell) {
+                                    _cell.parent().find('td:not(.future_day)').addClass('active');
+                                    selectDate(
+                                        'week',
+                                        moment(date).startOf('isoWeek'),
+                                        moment(date).endOf('isoWeek'),
+                                    );
+                                });
+                            } else {
+                                new_cell = _format_cell(function () {
+                                    selectDate(date);
+                                })
+                            }
+
+                    }
+                } */
+                cell: function (cell, date, cellOptions) {
+                    var _date = moment(date);
+
+                    function _format_cell(onClick) {
+                        cell = jQuery(cell[0]);
+
+                        var new_cell = cell.clone();
+                        new_cell.click(function () {
+                            onClick();
+                            self.calendar.calendar('refresh');
+                            self.range_calendar && self.range_calendar.calendar('refresh');
+                        });
+
+                        var _start_date = self._selected_date.date[0];
+
+                        if (self._selected_date.date[1]) {
+                            var _end_date = self._selected_date.date[1]
+                        } else if(cellOptions.mode === 'year') {
+                            var _end_date = moment(self._selected_date.date[0]).endOf('year')
+                        } else {
+                            var _end_date = _start_date;
+                        }
+
+                        if (_date >=  moment(_start_date) && _date <= moment(_end_date)) {
+                            new_cell.addClass('active');
+                        }
+
+                        cell.replaceWith(new_cell);  // This was the only way I could clear the onClick events :(
+                     }
+
+                    switch (cellOptions.mode) {
+                        case 'year':
+                            _format_cell(function() {
+                                selectDate('year', moment(date).month(0).date(1));
+                            });
+                            break;
+                        case 'month':
+                            _format_cell(function () {
+                                selectDate('month', moment(date).date(1));
+                            });
+                            break;
+                        case 'day':
+                            switch (self._custom_mode) {
+                                case 'week':
+                                    _format_cell(function () {
+                                        selectDate(
+                                            'week',
+                                            moment(date).startOf('isoWeek'),
+                                            moment(date).endOf('isoWeek'),
+                                        );
+                                    });
+                                    break;
+                                case 'range':
+                                    _format_cell(function () {
+                                        selectDate('range', date, self._selected_date.date[1]);
+                                    });
+                                    break;
+                                default:
+                                    _format_cell(function () {
+                                        selectDate('day', date);
+                                    })
+                            }
+
+                    }
+                }
+            },
+            isDisabled: function (date, mode) {
+                {#console.log(date, mode);#}
+                var _date = moment(date);
+                return _date >= tomorrow || (Boolean(self._selected_date.date[1]) && date >= moment(self._selected_date.date[1]));
+            },
+            onChange: function (date, text, mode) {
+                selectDate(mode, date);
+            },
+        });
+
+        if (Boolean(init_date2)) {
+            showDatePickerRange();
+        }
+
+    }
+
+    function showDatePicker() {
+        jQuery('#date-picker-modal').modal({
+            {#closable: false,#}
+            onVisible: initCalendar,
+        }).modal('show');
+
+    }
+
+    function showDatePickerRange() {
+        var _range_calendar = jQuery("<div class='ui calendar' id='date-picker'>");
+
+        var _initial_range_date = null;
+        if (init_date2) {
+            _initial_range_date = moment(init_date2).toDate();
+        }
+
+        jQuery('#date-picker-range-container').append(_range_calendar);
+        self.range_calendar = _range_calendar.calendar({
+            type: 'date',
+            firstDayOfWeek: 1,
+            monthFirst: false,
+            inline: true,
+            initialDate: _initial_range_date,
+            onChange: function (date, text, mode) {
+                selectDate('range', self._selected_date.date[0], date);
+                self.calendar.calendar('refresh');
+            },
+            isDisabled: function (date, mode) {
+                return moment(date) >= tomorrow || (Boolean(self._selected_date.date[0]) && date <= moment(self._selected_date.date[0]));
+            },
+            formatter: {
+                cell: function (cell, date, cellOptions) {
+                    if (!self._selected_date.date[1]) return;
+
+                    var _date = moment(date);
+                    var _start_date = moment(self._selected_date.date[0]);
+                    var _end_date = moment(self._selected_date.date[1]);
+
+                    if (_date >= _start_date && _date <= moment(_end_date)) {
+                        jQuery(cell[0]).addClass('active');
+                    }
+                }
+            }
+        });
+    }
+
+    function hideDatePickerRange() {
+        self.range_calendar.remove();
+        self.range_calendar = null;
+    }
+
+    this.select = function(el, mode) {
+        el = jQuery(el);
+        el.siblings().removeClass('active');
+        el.addClass('active');
+
+        switch (mode) {
+            case 'day':
+            case 'month':
+            case 'year':
+                self._custom_mode = null;
+                self.calendar.calendar('set mode', mode);
+                hideDatePickerRange();
+                break;
+            case 'week':
+                self._custom_mode = 'week';
+                self.calendar.calendar('set mode', 'day');
+                hideDatePickerRange();
+                break;
+            case 'range':
+                self._custom_mode = 'range';
+                self.calendar.calendar('set mode', 'day');
+                showDatePickerRange();
+                break
+        }
+
+        self.calendar.calendar('refresh');
+
+    };
+
+    this.confirm = function () {
+        window.location.assign(URI().removeSearch(['period', 'date']).addSearch({
+            period: self._selected_date.period,
+            date: self._selected_date.date.join(',')
+        }).toString())
+    };
+
+    jQuery('#date-picker-button').click(showDatePicker);
+    selectDate(init_period, init_date, init_date2);
+
+}
+
+jQuery(document).ready(function () {
+    behavee_date_picker = new BehaveeDatePicker(
+        '{{ date_picker_period }}',
+        '{{ date_picker_value[0]|safe }}',
+        {% if date_picker_value[1] %} '{{ date_picker_value[1]|safe }}' {% endif %}
+    );
+});
+
+</script>

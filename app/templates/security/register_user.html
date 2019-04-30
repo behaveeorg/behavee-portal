@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% from "security/_macros.html" import render_field, render_field_with_errors, render_checkbox_field %}
+{% include "security/_messages.html" %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div id="body" class="ui middle aligned center aligned grid">
+        <div class="column left aligned" style="min-width:280px; max-width:40%">
+			<div class="main ui center segment">
+				<form class="ui form form-user" action="{{ url_for_security('register') }}" method="post" name="register_user_form">
+					<h4 class="ui dividing header">{{ _('Register') }}</h4>
+					{{ register_user_form.hidden_tag() }}
+					{{ render_field_with_errors(register_user_form.email) }}
+					{{ render_field_with_errors(register_user_form.password) }}
+					<div class="ui field">
+						<div class="ui checkbox">
+							<input id="tos" name="remember" type="checkbox" value="y">
+							<label for="tos">I accept <a href="/tos" target="_blank">Terms of Service</a></label>
+						</div>
+						</div>
+					<input class="ui primary button" type="submit" id="submit" disabled>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script>
+		$('#tos').change(function(){
+			$('#submit').attr('disabled',!this.checked);
+		});
+	</script>
+
+{% endblock %}

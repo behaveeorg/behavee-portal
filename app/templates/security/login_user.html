@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% from "security/_macros.html" import render_field, render_field_with_errors, render_checkbox_field %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <div id="body" class="ui middle aligned center aligned grid">
+        <div class="column">
+            <div class="ui vertical masthead center aligned segment">
+                <div class="ui text container">
+                    <!--<h3>Please, login with Microsoft Active Directory B2C account</h3>-->
+                    <a class="ui teal button large" href="{{url_for('users_login')}}">Login</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

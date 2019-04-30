@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+{% from "analytics/_macros.html" import render_field, render_field_with_errors, render_checkbox_field %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block contentbefore %}
+    {% if current_user.is_authenticated %}
+        <form action="{{ url_for('partner_edit_view') }}" method="post" name="partner_form">
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+
+        <!-- main content -->
+            <div class="row">
+                <div class="eight wide column">
+                    <div class="ui segments">
+                        <div class="ui segment">
+                            <h5 class="ui header">Partner</h5>
+                        </div>
+                        <div class="ui segment">
+                            <div class="ui form">
+                                {{ partner_form.hidden_tag() }}
+                                {{ render_field_with_errors(partner_form.name) }}
+                                {{ render_field_with_errors(partner_form.description) }}
+                                <div class="three fields">
+                                {{ render_field_with_errors(partner_form.company_number) }}
+                                {{ render_field_with_errors(partner_form.vat_number) }}
+                                {{ render_field_with_errors(partner_form.partner_type) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="eight wide column">
+                    <div class="ui segments">
+                        <div class="ui segment">
+                            <h5 class="ui header">Address</h5>
+                        </div>
+                        <div class="ui segment">
+                            <div class="ui form">
+                                <div class="two fields">
+                                {{ render_field_with_errors(partner_form.address_geo_location_type) }}
+                                </div>
+                                <div class="two fields">
+                                {{ render_field_with_errors(partner_form.address_street) }}
+                                {{ render_field_with_errors(partner_form.address_street_no) }}
+                                </div>
+                                <div class="three fields">
+                                {{ render_field_with_errors(partner_form.address_zip_code) }}
+                                {{ render_field_with_errors(partner_form.address_city) }}
+                                {{ render_field_with_errors(partner_form.address_country_code) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="sixteen wide column">
+                    <input class="ui primary button" type="submit" id="submit">
+                    <a class="ui button" href="{{ url_for('index') }}">Cancel</a>
+                </div>
+            </div>
+    {% endif %}
+{% endblock %}
+
+{% block contentafter %}
+    {% if current_user.is_authenticated %}
+        </form>
+    {% endif %}
+{% endblock %}

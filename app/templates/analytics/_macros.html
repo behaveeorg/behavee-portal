@@ -1,0 +1,189 @@
+{% macro render_field_with_errors(field) %}
+<div class="ui field {% if field.flags.required %}required{% endif %}">
+    {{ field.label }} {{ field(class_='field', **kwargs)|safe }}
+    {% if field.errors %}
+        {% for error in field.errors %}
+        <div class="ui warning message">
+            <div class="content">
+                <p>{{ error }}</p>
+            </div>
+        </div>
+
+        {% endfor %}
+    {% endif %}
+</div>
+{% endmacro %}
+
+<!-- temporary workaround for additional rules in templates/analytics/heatmaps_add.html -->
+{% macro render_required_field_with_errors(field) %}
+<div class="ui field required">
+    {{ field.label }} {{ field(class_='field', required=true, **kwargs)|safe }}
+    {% if field.errors %}
+        {% for error in field.errors %}
+        <div class="ui warning message">
+            <div class="content">
+                <p>{{ error }}</p>
+            </div>
+        </div>
+
+        {% endfor %}
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro render_field(field) %}
+{% if field.flags.required %}
+<div class="ui field required">{{ field.label }} {{ field(class_='field', required=true **kwargs)|safe }}</div>
+{% else %}
+<div class="ui field">{{ field.label }} {{ field(class_='field', **kwargs)|safe }}</div>
+{% endif %}
+{% endmacro %}
+
+{% macro render_required_field(field) %}
+<div class="ui field required">{{ field.label }} {{ field(class_='field', required=true, **kwargs)|safe }}</div>
+{% endmacro %}
+
+{% macro render_hidden_field(field) %}
+<p>{{ field(class_='ui', **kwargs)|safe }}</p>
+{% endmacro %}
+
+{% macro render_checkbox_field(field) -%}
+<div class="ui field {% if field.flags.required %}required{% endif %}">
+    <div class="ui checkbox">
+      {{ field(type='checkbox', **kwargs) }}
+      {{ field.label }}
+    </div>
+</div>
+{%- endmacro %}
+
+{% macro render_matomo_widget(widgetId, widgetPath, widgetName, moduleToWidgetize, actionToWidgetize, otherParameters, idSite, token_auth, period, date, defaultHeight, widgetClass, widgetActive) %}
+    <div class="ui segments white">
+        <div class="ui segment no-padding-bottom">
+            <h5 class="ui left floated header">
+                {{ widgetName }}
+            </h5>
+            <h5 class="ui right floated header">
+                <i class="small expand icon link" onclick="javascript:toggleFullScreen(document.getElementById('{{widgetId}}'))"></i>
+            </h5>
+        </div>
+        <div class="clearfix"></div>
+        <div class="ui segment nopadding">
+        {% if widgetActive == true %}
+            <div>
+                <iframe width="100%"
+                        src="{{ widgetPath }}?module=Widgetize&action=iframe&moduleToWidgetize={{ moduleToWidgetize }}&actionToWidgetize={{ actionToWidgetize }}{{ otherParameters }}&idSite={{ idSite }}&token_auth={{ token_auth }}&period={{ period }}&date={{ date }}&disableLink=1&widget=1"
+                        scrolling="no"
+                        frameborder="0"
+                        marginheight="0"
+                        marginwidth="0"
+                        style="height: {{ defaultHeight }}px"
+                        class="{{widgetClass}}"
+                        id="{{widgetId}}"
+                        webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true"
+                        ></iframe>
+            </div>
+        {% else %}
+            <div class="defer-iframe"
+                 data-src="{{ widgetPath }}?module=Widgetize&action=iframe&moduleToWidgetize={{ moduleToWidgetize }}&actionToWidgetize={{ actionToWidgetize }}{{ otherParameters }}&idSite={{ idSite }}&token_auth={{ token_auth }}&period={{ period }}&date={{ date }}&disableLink=1&widget=1"
+                 data-style="height: {{defaultHeight}}px"
+                 data-class="{{widgetClass}}"
+                 data-id="{{widgetId}}">
+            </div>
+        {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro render_matomo_widget_nolabel(widgetPath, widgetName, moduleToWidgetize, actionToWidgetize, otherParameters, idSite, token_auth, period, date, defaultHeight) %}
+<iframe width="100%" height="{{ defaultHeight }}" src="{{ widgetPath }}?module=Widgetize&action=iframe&moduleToWidgetize={{ moduleToWidgetize }}&actionToWidgetize={{ actionToWidgetize }}{{ otherParameters }}&idSite={{ idSite }}&token_auth={{ token_auth }}&period={{ period }}&date={{ date }}&disableLink=1&widget=1" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+{% endmacro %}
+
+{% macro render_rules_js(form) %}
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('select:has(option[value="url"]:selected)')
+                .parents('.ruleset')
+                .find('input[name^=\'rules_value2\']')
+                .parent()
+                .hide();
+
+            jQuery('select:has(option[value="path"]:selected)')
+                .parents('.ruleset')
+                .find('input[name^=\'rules_value2\']')
+                .parent()
+                .hide();
+
+            jQuery('select:has(option[value="urlparam"]:selected)')
+                .parents('.ruleset')
+                .find('input[name^=\'rules_value2\']')
+                .parent()
+                .show();
+
+            jQuery('#add-rule').click(function () {
+                var count_rules = parseInt(jQuery('#count_rules').val());
+
+                var attribute_template = '{{ render_field(form.rules_attribute_0)|trim }}'
+                    .replace(new RegExp('rules_attribute_0', 'gi'), 'rules_attribute_' + count_rules)
+                    .replace(new RegExp('Rules attribute 0', 'gi'), 'Rules attribute ' + count_rules);
+                var type_template = '{{ render_field(form.rules_type_0)|trim }}'
+                    .replace(new RegExp('type_template_0', 'gi'), 'type_template_' + count_rules)
+                    .replace(new RegExp('Rules Type 0', 'gi'), 'Rules Type ' + count_rules);
+                var value_template = '{{ render_required_field(form.rules_value_0)|trim }}'
+                    .replace(new RegExp('value_template_0', 'gi'), 'value_template_' + count_rules)
+                    .replace(new RegExp('Rules Value 0', 'gi'), 'Rules Value ' + count_rules);
+                var value2_template = '{{ render_field(form.rules_value2_0)|trim }}'
+                    .replace(new RegExp('value2_template_0', 'gi'), 'value2_template_' + count_rules)
+                    .replace(new RegExp('Rules Value2 0', 'gi'), 'Rules Value2 ' + count_rules);
+
+                var ruleset = jQuery("<div class='ruleset'><div class='four fields'>" + attribute_template + type_template+value_template+value2_template+"</div><button class='ui negative basic button delete-ruleset' type='button'>Delete Rule</button><div class='ui divider'></div>");
+
+                ruleset.find("input[name^='rules_value2']").parent().hide();
+                ruleset.find('select').val(function () {
+                    return jQuery(this).find('option:first').attr('value');
+                });
+                ruleset.find('input').val('');
+
+
+                jQuery('#ruleset-list').append(ruleset);
+
+                count_rules++;
+                jQuery('#count_rules').val(count_rules);
+            });
+
+            jQuery("form[name='form']").submit(function (event) {
+                event.preventDefault();
+                jQuery('#count_rules').val(jQuery('.ruleset').length);
+
+                // Fix an issue with submissions. See https://stackoverflow.com/a/40330287
+                jQuery(this).unbind('submit').submit();
+            })
+
+
+        }).on('click', '.delete-ruleset', function () {
+            jQuery(this).parent().remove();
+            jQuery('#count_rules').val(jQuery('.ruleset').length);
+        }).on('change', "select[name^='rules_attribute']", function () {
+            var parent = jQuery(this).parents('.ruleset').one();
+            parent.find('input[name^=rules_value]').val('');
+
+            var el = parent.find("input[name^='rules_value2']").parent();
+
+            if (jQuery(this).val() === 'urlparam') {
+                el.show();
+            } else {
+                el.hide();
+            }
+        });
+
+
+    </script>
+{% endmacro %}
+
+<!-- return class for menu item -->
+{% macro render_menu_item_transition(value) %}
+	{% if value == 'active'%}
+		transition visible active
+    {% else %}
+        transition visible
+	{% endif %}
+{% endmacro %}

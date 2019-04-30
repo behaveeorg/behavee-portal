@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% from "analytics/_macros.html" import render_field, render_field_with_errors, render_checkbox_field, render_subform_field_with_errors, render_rules_js, render_matomo_widget_nolabel %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+        <div class="row">
+            <div class="sixteen wide column">
+                <div class="ui segments">
+                    <div class="ui segment">
+                        <h3 class="left floated left aligned six wide column">
+                            Show Session Recording
+                        </h3>
+                    </div>
+                    <div class="ui segment">
+                    <!-- main content -->
+                    {{ render_matomo_widget_nolabel(app.config['MATOMO_URL'], 'SessionRecording', 'HeatmapSessionRecording', 'getRecordedSessions', '&idSiteHsr='+idsitehsr, g.idSite, session['matomo_token_auth'], 'day', 'today') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    #<script>
+    #    $(document).ready(function () {
+    #        $('iframe').iframeAutoHeight({debug: false, minHeight: 100});
+    #    });
+    #</script>
+
+    <script>
+        function resizeIframes(){
+            // Set specific variable to represent all iframe tags.
+            var iFrames = document.getElementsByTagName('iframe');
+
+            // Iterate through all iframes in the page.
+            for (var i = 0, j = iFrames.length; i < j; i++)
+            {
+                // Set inline style to equal the body height of the iframed content.
+                iFrames[i].style.height = iFrames[i].contentWindow.document.body.offsetHeight + 'px';
+            }
+        }
+
+        setInterval(resizeIframes,100);
+    </script>
+
+
+    <script>jQuery('.ui.dropdown').dropdown();</script>
+    {% endif %}
+
+{% endblock %}

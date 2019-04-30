@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+{% from "security/_macros.html" import render_field, render_field_with_errors, render_checkbox_field %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+        <div class="row">
+            <div class="sixteen wide column">
+            {% include "_sites_picker.html" %}
+            </div>
+        </div>
+        <!-- main content -->
+        <div class="row">
+            <div class="sixteen wide column">
+                <div class="ui segments">
+                    <div class="ui segment">
+                        <h3 class="left floated left aligned six wide column">
+                            Session Recordings
+                        </h3>
+                    </div>
+
+                <!-- main content -->
+                <script type="text/javascript">
+                $(document)
+                  .ready(function() {
+                    $('.popups .popup.icon')
+                      .popup()
+                    ;
+                  })
+                ;
+                </script>
+
+                <div class="ui segment">
+                <table class="ui table very compact" >
+
+                    <tbody>
+                        {% for recording in recordings_list %}
+                        <tr>
+                            <td>{{ recording.name }}</td>
+                            {#<td>{{ site.main_url }}</td>#}
+                            <td class="ui right aligned three wide">
+
+                                <div class="ui right floated main menu popups">
+                                    <a class="globe icon item mini" data-content="Show Session Recording" href="{{ url_for('analytics_session_recordings_show', idSite=idsite, idsitehsr=recording.idsitehsr) }}">
+                                      <i class="chart bar icon"></i>
+                                    </a>
+
+                                    <a class="file popup icon item" data-content="Session Recording Detail" href="{{ url_for('analytics_session_recordings', idSite=idsite, idSiteHsr=recording.idsitehsr) }}">
+                                      <i class="file alternate outline icon"></i>
+                                    </a>
+
+                                    <a class="edit popup icon item" data-content="Edit Session Recording" href="{{ url_for('analytics_session_recordings_edit', idSite=idsite, idsitehsr=recording.idsitehsr) }}">
+                                      <i class="edit alternate outline icon blue"></i>
+
+                                    </a>
+
+                                    <a class="edit popup icon item" data-content="Delete Session Recording" href="{{ url_for('analytics_session_recordings_delete', idSite=idsite, idsitehsr=recording.idsitehsr) }}">
+                                      <i class="trash alternate outline icon red"></i>
+
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+                    <div class="ui segment">
+                        <div class="right floated right aligned six wide column">
+                            <a class="ui positive button" href="{{ url_for('analytics_session_recordings_add', idSite=idsite) }}">Add new Session Recording</a>
+                        </div>
+
+                    </div>
+            </div>
+        </div>
+        </div>
+
+    <script>jQuery('.ui.dropdown').dropdown();</script>
+
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+{% from "analytics/_macros.html" import render_matomo_widget %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+        <div class="row">
+            <div class="sixteen wide column">
+            {% include "_sites_picker.html" %}
+            {% include "_date_picker.html" %}
+            </div>
+        </div>
+        <!-- main content -->
+
+        {% if g.idSite is not none %}
+            <div class="stretched row">
+                <div class="sixteen wide tablet ten wide computer column" style="padding-bottom: 10px;">
+                    {{ render_matomo_widget('widget_01', app.config['MATOMO_URL'], 'Realtime Map', 'UserCountryMap', 'realtimeMap', '', g.idSite, session['matomo_token_auth'], request_period, request_date, 400, '', true) }}
+                </div>
+                <div class="sixteen wide tablet six wide computer column" style="padding-bottom: 10px;">
+                    {{ render_matomo_widget('widget_02', app.config['MATOMO_URL'], 'Visitor Map', 'UserCountryMap', 'visitorMap', '', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', true) }}
+                    {{ render_matomo_widget('widget_03', app.config['MATOMO_URL'], 'Returning Visits Over Time', 'VisitFrequency', 'getEvolutionGraph', '&forceView=1&viewDataTable=graphEvolution', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', true) }}
+                </div>
+                <div class="sixteen wide tablet four wide computer column">
+                    {{ render_matomo_widget('widget_04', app.config['MATOMO_URL'], 'Country', 'UserCountry', 'getCountry', '', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', true) }}
+                </div>
+                <div class="sixteen wide tablet four wide computer column">
+                    {{ render_matomo_widget('widget_05', app.config['MATOMO_URL'], 'City', 'UserCountry', 'getCity', '', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', true) }}
+                </div>
+                <div class="sixteen wide tablet four wide computer column">
+                    {{ render_matomo_widget('widget_06', app.config['MATOMO_URL'], 'Visits by Day of Week', 'VisitTime', 'getByDayOfWeek', '', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', true) }}
+                </div>
+                <div class="sixteen wide tablet four wide computer column">
+                    {{ render_matomo_widget('widget_07', app.config['MATOMO_URL'], 'Visits per Local Time', 'VisitTime', 'getVisitInformationPerLocalTime', '', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', true) }}
+                </div>
+            </div>
+            <div class="stretched row">
+                <div class="sixteen wide tablet six wide computer column">
+                    {{ render_matomo_widget('widget_08', app.config['MATOMO_URL'], 'Visitors in Realtime', 'Live', 'widget', '', g.idSite, session['matomo_token_auth'], request_period, request_date, 100, 'auto-height', false) }}
+                </div>
+                <div class="sixteen wide tablet ten wide computer column">
+                    {{ render_matomo_widget('widget_09', app.config['MATOMO_URL'], 'Visitor Log', 'Live', 'getLastVisitsDetails', '', g.idSite, session['matomo_token_auth'], request_period, request_date, 500, 'auto-height', false) }}
+                </div>
+            </div>
+        {% endif %}
+    {% else %}
+    <!-- non-authenticated user -->
+    <div class="ui container response">
+        <div class="response content">
+            <p>{{ message }}</p>
+        </div>
+    </div>
+    <div id="body" class="ui middle aligned center aligned grid">
+        <div class="column">
+            <div class="ui vertical masthead center aligned segment">
+                <div class="ui text container">
+                    <h1 class="ui header">Behavee Portal</h1>
+                    <h2>New standard in hyper-personalized offering.</h2>
+                    <p>More business opportunities and money from interconnection with business partners.<br>
+                        It is open so you have more business insights from other business segments.<br>
+                        It is GDPR compliant so your data and data of your visitors will not exceeds <br>
+                        the regulatory sets by your national government.
+                    </p>
+                </div>
+            </div>
+            <br><br>
+            <div class="ui vertical masthead center aligned segment">
+                <div class="ui text container">
+                    <h3>Login with Microsoft Active Directory B2C account</h3>
+                    <a class="ui teal button large" href="{{url_for('users_login')}}">Login</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block footer %}
+    {% if g.idSite is not none %}
+    {% include "analytics/_iframe_resize.html" %}
+    {% endif %}
+{% endblock %}

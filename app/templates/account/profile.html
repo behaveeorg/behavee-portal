@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% from "security/_macros.html" import render_field, render_field_with_errors, render_checkbox_field %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+        <!-- main content -->
+
+        <div class="row">
+            <div class="sixteen wide column">
+                <div class="ui segments">
+                    <div class="ui segment">
+                        <h5 class="ui header">User profile</h5>
+                    </div>
+                    <div class="ui segment">
+                        <table class="ui definition table">
+                            <tbody>
+                            <tr>
+                                <td><i class="circular inverted teal user icon"></i> Full Name</td>
+                                <td>{{user.first_name}} {{user.last_name}}</td>
+                            </tr>
+                            <tr>
+                                <td><i class="circular inverted teal at icon"></i> Email</td>
+                                <td>{{user.email}}</td>
+                            </tr>
+                            <tr>
+                                <td><i class="circular inverted teal mobile alternate icon"></i></i> Phone</td>
+                                <td>{{user.phone}}</td>
+                            </tr>
+                            <tr>
+                                <td><i class="circular inverted teal user secret icon"></i></i> API Authentication token &lt;token_auth&gt;</td>
+                                <td><pre><code>{{matomo_user.token_auth}}</code></pre></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="sixteen wide column">
+                <div class="ui segments">
+                    <div class="ui segment">
+                        <h5 class="ui header">Activity</h5>
+                    </div>
+                    <div class="ui segment">
+                        <table class="ui definition table">
+                            <tbody>
+                            <tr>
+                                <td>Current login</td>
+                                <td>{{d.current_login_at}}</td>
+                                <td>IP: {{user.current_login_ip}}</td>
+                            </tr>
+                            <tr>
+                                <td>Last login</td>
+                                <td>{{d.last_login_at}}</td>
+                                <td>IP: {{user.last_login_ip}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endif %}
+
+{% endblock %}

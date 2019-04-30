@@ -1,0 +1,28 @@
+{% macro render_field_with_errors(field) %}
+<div class="ui field">
+    {{ field.label }} {{ field(class_='field', **kwargs)|safe }}
+    {% if field.errors %}
+        {% for error in field.errors %}
+        <div class="ui warning message">
+            <div class="content">
+                <p>{{ error }}</p>
+            </div>
+        </div>
+
+        {% endfor %}
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro render_field(field) %}
+<p>{{ field(class_='ui', **kwargs)|safe }}</p>
+{% endmacro %}
+
+{% macro render_checkbox_field(field) -%}
+<div class="ui field">
+    <div class="ui checkbox">
+      {{ field(type='checkbox', **kwargs) }}
+      {{ field.label }}
+    </div>
+</div>
+{%- endmacro %}

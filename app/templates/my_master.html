@@ -1,0 +1,23 @@
+{% extends 'admin/base.html' %}
+
+{% block head_css %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/my_flask_admin.css', _external=True) }}" ></link>
+{% endblock %}
+
+{% block access_control %}
+{% if current_user.is_authenticated %}
+<div class="navbar-text btn-group pull-right">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="color:#fff">
+        <i class="glyphicon glyphicon-user"></i>
+        {% if current_user.login -%}
+        {{ current_user.login }}
+        {% else -%}
+        {{ current_user.email }}
+        {%- endif %}<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="{{ url_for('security.logout') }}">Log out</a></li>
+    </ul>
+</div>
+{% endif %}
+{% endblock %}

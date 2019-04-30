@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% from "security/_macros.html" import render_field, render_field_with_errors, render_checkbox_field %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+    <div class="row">
+        <div class="column">
+            <div class="ui segments no-padding">
+                <div class="ui segment">
+                    <h5 class="ui left floated header">
+                        Please select website
+                    </h5>
+                    <h5 class="ui right floated header">
+                        <i class="ion-ios-refresh-empty refreshing icon link"></i>
+                    </h5>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="ui segment left aligned">
+                    {% if site_list|length > 0%}
+                    <table class="ui compact celled definition table tablet stackable" id="site-picker">
+                        <tbody>
+                            <tr>
+                                <th>#</th>
+                                <th>Site Name</th>
+                                <th>Site Url</th>
+                            </tr>
+                            {% for site in site_list %}
+                            <tr data-url="{{ next_url[site.idsite]}}">
+                                <td>{{ site.idsite }}</td>
+                                <td style="padding-left: 0.5rem; cursor: pointer">{{ site.name }}</td>
+                                <td>{{ site.main_url }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="left floated left aligned six wide column">
+                        <p>
+                            You don't have site created yet. Create one and start using Behavee tracking.
+                        </p>
+                        <p>
+                            <a class="ui positive button" href="{{ url_for('analytics_sites_add') }}">Add new site</a>
+                        </p>
+                    </div>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        jQuery('.ui.dropdown').dropdown();
+        jQuery('#site-picker tr').click(function () {
+            window.location.replace(jQuery(this).data('url'));
+        })
+    </script>
+    {% endif %}
+
+{% endblock %}
+

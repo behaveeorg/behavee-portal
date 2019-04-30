@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <link href="/admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+        <link href="/admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5" rel="stylesheet">
+        <link href="/admin/static/admin/css/bootstrap3/admin.css?v=1.1.1" rel="stylesheet">
+        <link href="/admin/static/vendor/select2/select2.css?v=3.5.2" rel="stylesheet">
+        <link href="/admin/static/vendor/select2/select2-bootstrap3.css?v=1.4.6" rel="stylesheet">
+        <style>
+        body {
+            padding-top: 4px;
+            width: 100%;
+        }
+        td, th {
+            padding: 5px;
+            vertical-align: top;
+        }
+        pre {
+            margin: 0px 0px 0px 0px;
+            padding: 0px 0px 0px 0px;
+        }
+        ul {
+            margin: 0 0 0 10px;
+            padding: 0;
+        }
+        </style>
+    </head>
+    <body>
+    <div>
+        {% for doc in autodoc %}
+        <p class="mapping">
+            <h3><a id="rule-{{doc.rule|urlencode}}" class="rule">{{doc.rule|escape}}</a></h3>
+            <table width="100%">
+            <tr>
+                <th width="20%">location:</th>
+                <td>{{doc.location.filename}}:{{doc.location.line}}</td>
+            </tr>
+            <tr>
+                <th width="20%">methods:</th>
+                <td>
+                    <ul class="methods">
+                        {% for method in doc.methods -%}
+                        <li class="method">{{method}}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th width="20%">arguments:</th>
+                <td>
+                    <ul class="arguments">
+                        {% for arg in doc.args %}
+                        <li>
+                            <span class="argument"><strong>{{arg}}</strong></span>
+                            <span class="default"><strong>{{doc.defaults[arg]}}</strong></span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th width="20%">description:</th>
+                <td>{% autoescape false %}{{doc.docstring}}{% endautoescape %}</td>
+            </tr>
+            </table>
+        {% endfor %}
+    </div>
+
+
+    <script src="/admin/static/vendor/jquery.min.js?v=2.1.4" type="text/javascript"></script>
+    <script src="/admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5" type="text/javascript"></script>
+    <script src="/admin/static/vendor/moment.min.js?v=2.9.0" type="text/javascript"></script>
+    <script src="/admin/static/vendor/select2/select2.min.js?v=3.5.2" type="text/javascript"></script>
+
+    </body>
+</html>

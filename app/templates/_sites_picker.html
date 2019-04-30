@@ -1,0 +1,10 @@
+{% if current_site %}
+
+<div class="ui left labeled button" tabindex="0">
+    <span class="ui basic label" onclick="window.location.href = '{{ current_site.picker_url }}'">[{{ current_site.idsite }}] {{ current_site.name }}</span>
+    <div class="ui icon button" onclick="window.location.href = '{{ current_site.picker_url }}'">
+        <i class="dropdown icon"></i>
+    </div>
+</div>
+
+{% endif %}

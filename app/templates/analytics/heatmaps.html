@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+{% from "security/_macros.html" import render_field, render_field_with_errors, render_checkbox_field %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- authenticated user -->
+    {% if current_user.is_authenticated %}
+        <div class="row">
+            <div class="sixteen wide column">
+            {% include "_sites_picker.html" %}
+            </div>
+        </div>
+        <!-- main content -->
+        <div class="row">
+            <div class="sixteen wide column">
+                <div class="ui segment">
+                    <div class="ui left aligned grid">
+                        <div class="left floated left aligned six wide column">
+                            <h3>{{ heatmap.name }}</h3>
+                        </div>
+                        <div class="right floated right aligned six wide column">
+                            <a class="ui primary button small" href="{{ url_for('analytics_heatmaps_edit', idSite=heatmap.idsite, idsitehsr=heatmap.idsitehsr) }}">
+                                Edit
+                            </a>
+                            <a class="ui button small" href="{{ url_for('analytics_heatmaps_delete', idSite=heatmap.idsite, idsitehsr=heatmap.idsitehsr) }}">Delete</a>
+                        </div>
+                    </div>
+                    <table class="ui compact cellet definition table">
+                        <tbody>
+                        <tr>
+                            <td class="collapsing">Sample Limit</td>
+                            <td>{{ heatmap.sample_limit }}</td>
+                        </tr>
+                        <tr>
+                            <td class="collapsing">Sample Rate</td>
+                            <td>{{ heatmap.sample_rate }} %</td>
+                        </tr>
+                        <tr>
+                            <td class="collapsing">Excluded Elements</td>
+                            <td>{{ heatmap.excluded_elements }}</td>
+                        </tr>
+                        <tr>
+                            <td class="collapsing">Screenshot URL</td>
+                            <td>{{ heatmap.screenshot_url }}</td>
+                        </tr>
+                        <tr>
+                            <td class="collapsing">Breakpoint Tablet</td>
+                            <td>{{ heatmap.breakpoint_tablet }}</td>
+                        </tr>
+                        <tr>
+                            <td class="collapsing">Breakpoint Mobile</td>
+                            <td>{{ heatmap.breakpoint_mobile }}</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+
+                    <table class="ui compact cellet definition table">
+                        <tr>
+                            <td class="collapsing" colspan="2">Rules</td>
+                        </tr>
+                        {% for item in heatmap.match_page_rules %}
+                        <tr>
+                            <td class="collapsing">{{ labels.attribute[item.attribute] }}</td>
+                            <td>
+                                {% if item.attribute == 'urlparam' %}
+                                    <b>{{ item.value }}</b> {% if item.inverted == '1' %} not {% endif %} {{ labels.type[item.type]}} <b>{{ item.value2 }}</b>
+                                {% else %}
+                                    {% if item.inverted == '1' %} not {% endif %} {{ labels.type[item.type]}} <b>{{ item.value }}</b>
+                                {% endif %}
+                            <td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{# app/templates/macros.html #}
+
+<!-- Highlight the current tab -->
+{% macro nav_link(endpoint, text, target) %}
+	{% if request.endpoint is not none %}
+		{% if request.endpoint.endswith(endpoint) %}
+		    <a class="active item" href="{{ url_for(endpoint) }}" target="{{ target }}">{{ text }}</a>
+		{% else %}
+		    <a class="item" href="{{ url_for(endpoint) }}" target="{{ target }}">{{ text }}</a>
+		{% endif %}
+	{% else %}
+    	<a class="item" href="{{ url_for(endpoint) }}" target="{{ target }}">{{ text }}</a>
+	{% endif %}
+{% endmacro %}
+
+<!-- Render a WTForm form's field (with it's possible associated errors) from a WTForms form -->
+{% macro render_field(field) %}
+	<div class="ui field">
+		{{ field(name_=field.name, id=field.name, placeholder=field.description, class_="field") }}
+	</div>
+  	{% if field.errors %}
+    	<ul>
+	    	{% for error in field.errors %}
+	      		<li class="form-error">{{ error }}</li>
+	    	{% endfor %}
+    	</ul>
+  	{% endif %}
+{% endmacro %}
+
+<!-- Render select input with user's sites -->
+{% macro render_sites_select(matomo_sites, idSite=None) %}
+	{% for item in matomo_sites %}
+		{% if item.idsite == idSite %}
+			<option value="{{ item.idsite }}" selected>[{{ item.idsite }}] - {{ item.name }}</option>
+		{% else %}
+			<option value="{{ item.idsite }}">[{{ item.idsite }}] - {{ item.name }}</option>
+		{% endif %}
+    {% endfor %}
+{% endmacro %}
+
+{% macro render_heatmaps_select(matomo_heatmaps, idSite, idSiteHsr) %}
+	{% for item in matomo_heatmaps[idSite] %}
+        {% if item.idsitehsr == idSiteHsr %}
+            <option value="{{ item.idsitehsr }}" selected>[{{ item.idsitehsr }}] - {{ item.name }}</option>
+        {% else %}
+            <option value="{{ item.idsitehsr }}">[{{ item.idsitehsr }}] - {{ item.name }}</option>
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
